@@ -20,22 +20,20 @@ import com.squareup.javapoet.TypeVariableName;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.lang.model.element.Modifier;
 
 final class Generator {
 
     static void generate(final Source specModel, final File targetDir) throws IOException {
-        assert specModel != null;
-        assert targetDir != null;
-
         final Generator generator = new Generator();
-        final JavaFile javaFile = generator.buildJavaFile(specModel);
-        javaFile.writeToFile(targetDir);
+        final JavaFile javaFile = generator.buildJavaFile(Objects.requireNonNull(specModel));
+        javaFile.writeToFile(Objects.requireNonNull(targetDir));
     }
 
     private JavaFile buildJavaFile(final Source src) {
-        assert src.getDefinition() != null;
+        Objects.requireNonNull(src.getDefinition());
 
         final TypeSpec typeSpec = buildTypeSpec(src.getDefinition());
         JavaFile.Builder builder = JavaFile.builder(src.getPackageName(), typeSpec);
@@ -56,7 +54,7 @@ final class Generator {
     }
 
     private TypeSpec buildClassSpec(final ClassDefinition classDefinition) {
-        assert classDefinition.getName() != null;
+        Objects.requireNonNull(classDefinition.getName());
 
         final TypeSpec.Builder builder = TypeSpec.classBuilder(classDefinition.getName());
 
@@ -108,7 +106,7 @@ final class Generator {
     }
 
     private FieldSpec buildFieldSpec(final Property property) {
-        assert property.getName() != null;
+        Objects.requireNonNull(property.getName());
 
         final TypeName typeName = getTypeName(property.getType());
         final FieldSpec.Builder builder = FieldSpec.builder(typeName, property.getName());
@@ -194,7 +192,7 @@ final class Generator {
     }
 
     private AnnotationSpec buildAnnotation(Annotation annotation) {
-        assert annotation.getName() != null;
+        Objects.requireNonNull(annotation.getName());
 
         final ClassName className = ClassName.bestGuess(annotation.getName());
         final AnnotationSpec.Builder builder = AnnotationSpec.builder(className);
@@ -217,8 +215,8 @@ final class Generator {
         final MethodSpec.Builder builder;
 
         if (!method.isConstructor()) {
-            assert method.getName() != null;
-            assert method.getReturnType() != null;
+            Objects.requireNonNull(method.getName());
+            Objects.requireNonNull(method.getReturnType());
             builder = MethodSpec.methodBuilder(method.getName());
 
             final TypeName returnType = getTypeName(method.getReturnType());
@@ -273,8 +271,8 @@ final class Generator {
     }
 
     private ParameterSpec buildParameterSpecs(Parameter parameter) {
-        assert parameter.getName() != null;
-        assert parameter.getType() != null;
+        Objects.requireNonNull(parameter.getName());
+        Objects.requireNonNull(parameter.getType());
 
         TypeName type = getTypeName(parameter.getType());
         final ParameterSpec.Builder builder = ParameterSpec.builder(type, parameter.getName());
