@@ -2,7 +2,9 @@ package com.github.martydashp.javacodegen;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.github.martydashp.javacodegen.builder.JavaFileBuilder;
 import com.github.martydashp.javacodegen.model.Source;
+import com.squareup.javapoet.JavaFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -79,8 +81,8 @@ final public class JavaCodeGen {
         List<Source> sourceFileList = SpecReader.ofYAML(Objects.requireNonNull(spec));
 
         for (final Source sourceFile : sourceFileList) {
-            Generator.generate(sourceFile, targetDir);
+            final JavaFile javaFile = JavaFileBuilder.getJavaFile(sourceFile);
+            javaFile.writeToFile(Objects.requireNonNull(targetDir));
         }
     }
-
 }

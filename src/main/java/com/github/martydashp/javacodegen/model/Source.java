@@ -16,6 +16,7 @@ public class Source {
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
     @JsonSubTypes(value = {
         @JsonSubTypes.Type(value = ClassDefinition.class, name = "class"),
+        @JsonSubTypes.Type(value = EnumDefinition.class, name = "enum")
     })
     private Definition definition;
 }

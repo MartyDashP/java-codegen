@@ -6,9 +6,9 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ClassDefinition extends Definition {
+public class EnumDefinition extends Definition {
 
     private String superClassName;
-
+    private List<Method> methods;
     private List<Property> properties;
 }

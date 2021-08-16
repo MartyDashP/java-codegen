@@ -1,0 +1,77 @@
+package com.github.martydashp.javacodegen.builder;
+
+import com.github.martydashp.javacodegen.model.Property;
+import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.TypeName;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+import javax.lang.model.element.Modifier;
+
+public final class FieldSpecBuilder {
+
+    private final Property property;
+    private FieldSpec.Builder builder;
+
+    public static List<FieldSpec> getFieldSpecs(final List<Property> properties) {
+        Objects.requireNonNull(properties);
+
+        return properties.stream()
+                         .map(FieldSpecBuilder::getFieldSpec)
+                         .collect(Collectors.toList());
+    }
+
+    public static FieldSpec getFieldSpec(final Property property) {
+        return new FieldSpecBuilder(property).build();
+    }
+
+    protected FieldSpecBuilder(final Property property) {
+        this.property = property;
+        this.validate();
+    }
+
+    protected FieldSpec build() {
+        final TypeName typeName = TypeBuilder.getTypeName(property.getType());
+        builder = FieldSpec.builder(typeName, property.getName());
+
+        addModifiers();
+        addAnnotations();
+        addJavaDoc();
+        addInitValue();
+
+        return builder.build();
+    }
+
+    private void validate() {
+        Objects.requireNonNull(property);
+        Objects.requireNonNull(property.getName());
+    }
+
+    private void addModifiers() {
+        if (property.getModifiers() != null) {
+            final Modifier[] modifiers = ModifierBuilder.getModifiers(property.getModifiers());
+            builder.addModifiers(modifiers);
+        }
+    }
+
+    private void addAnnotations() {
+        if (property.getAnnotations() != null) {
+            final List<AnnotationSpec> specs = AnnotationBuilder.getAnnotationSpecs(property.getAnnotations());
+            builder.addAnnotations(specs);
+        }
+    }
+
+    private void addJavaDoc() {
+        if (property.getJavaDoc() != null) {
+            builder.addJavadoc(property.getJavaDoc());
+        }
+    }
+
+    private void addInitValue() {
+        if (property.getInitValue() != null) {
+            builder.initializer(property.getInitValue());
+        }
+    }
+
+}

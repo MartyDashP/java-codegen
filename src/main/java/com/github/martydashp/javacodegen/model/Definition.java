@@ -13,4 +13,5 @@ public abstract class Definition {
     private List<String> superInterface;
     private List<Annotation> annotations;
     private List<Generic> generics;
+    private List<Method> methods;
 }
