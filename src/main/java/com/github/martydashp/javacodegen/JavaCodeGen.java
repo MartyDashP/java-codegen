@@ -18,6 +18,9 @@ final public class JavaCodeGen {
     @Parameter(names = {"-targetPath"}, required = true)
     private String targetPath;
 
+    @Parameter(names = {"-specFormat"})
+    private String specFormat;
+
     private File specs;
     private File targetDir;
 
@@ -77,8 +80,23 @@ final public class JavaCodeGen {
         }
     }
 
+    public String getSpecFormat(final File specFile) {
+        if (specFormat == null) {
+            final String fileName = specFile.getName();
+
+            if (fileName.contains(".")) {
+                int index = fileName.lastIndexOf('.');
+                if (index > 0) {
+                    specFormat = fileName.substring(index + 1);
+                }
+            }
+        }
+
+        return specFormat;
+    }
+
     public void generateSources(final File spec) throws IOException {
-        List<Source> sourceFileList = SpecReader.ofYAML(Objects.requireNonNull(spec));
+        List<Source> sourceFileList = SpecReader.of(Objects.requireNonNull(spec), getSpecFormat(spec));
 
         for (final Source sourceFile : sourceFileList) {
             final JavaFile javaFile = JavaFileBuilder.getJavaFile(sourceFile);

@@ -13,7 +13,7 @@ public class Source {
     private List<String> imports;
     private String indent;
 
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind")
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind", visible = true)
     @JsonSubTypes(value = {
         @JsonSubTypes.Type(value = ClassDefinition.class, name = "class"),
         @JsonSubTypes.Type(value = EnumDefinition.class, name = "enum")

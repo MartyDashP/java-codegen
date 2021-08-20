@@ -106,11 +106,13 @@ public final class MethodSpecBuilder {
     }
 
     private void addExceptions() {
-        final List<TypeName> exceptionTypes = method.getExceptions()
-                                                    .stream()
-                                                    .map(TypeBuilder::getTypeName)
-                                                    .collect(Collectors.toList());
-        builder.addExceptions(exceptionTypes);
+        if (method.getExceptions() != null) {
+            final List<TypeName> exceptionTypes = method.getExceptions()
+                                                        .stream()
+                                                        .map(TypeBuilder::getTypeName)
+                                                        .collect(Collectors.toList());
+            builder.addExceptions(exceptionTypes);
+        }
     }
 
 }
