@@ -77,7 +77,7 @@ final public class JavaCodeGen {
         }
     }
 
-    private void generateSources(final File spec) throws IOException {
+    public void generateSources(final File spec) throws IOException {
         List<Source> sourceFileList = SpecReader.ofYAML(Objects.requireNonNull(spec));
 
         for (final Source sourceFile : sourceFileList) {

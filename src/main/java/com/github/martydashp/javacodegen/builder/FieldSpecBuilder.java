@@ -4,6 +4,7 @@ import com.github.martydashp.javacodegen.model.Property;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.TypeName;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -15,7 +16,9 @@ public final class FieldSpecBuilder {
     private FieldSpec.Builder builder;
 
     public static List<FieldSpec> getFieldSpecs(final List<Property> properties) {
-        Objects.requireNonNull(properties);
+        if (properties == null || properties.size() == 0) {
+            return Collections.emptyList();
+        }
 
         return properties.stream()
                          .map(FieldSpecBuilder::getFieldSpec)
@@ -28,10 +31,12 @@ public final class FieldSpecBuilder {
 
     protected FieldSpecBuilder(final Property property) {
         this.property = property;
-        this.validate();
     }
 
     protected FieldSpec build() {
+        Objects.requireNonNull(property);
+        Objects.requireNonNull(property.getName());
+
         final TypeName typeName = TypeBuilder.getTypeName(property.getType());
         builder = FieldSpec.builder(typeName, property.getName());
 
@@ -43,11 +48,6 @@ public final class FieldSpecBuilder {
         return builder.build();
     }
 
-    private void validate() {
-        Objects.requireNonNull(property);
-        Objects.requireNonNull(property.getName());
-    }
-
     private void addModifiers() {
         if (property.getModifiers() != null) {
             final Modifier[] modifiers = ModifierBuilder.getModifiers(property.getModifiers());
@@ -57,7 +57,7 @@ public final class FieldSpecBuilder {
 
     private void addAnnotations() {
         if (property.getAnnotations() != null) {
-            final List<AnnotationSpec> specs = AnnotationBuilder.getAnnotationSpecs(property.getAnnotations());
+            final List<AnnotationSpec> specs = AnnotationSpecBuilder.getAnnotationSpecs(property.getAnnotations());
             builder.addAnnotations(specs);
         }
     }

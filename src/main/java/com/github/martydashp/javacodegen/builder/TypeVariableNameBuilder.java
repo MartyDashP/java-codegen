@@ -3,6 +3,7 @@ package com.github.martydashp.javacodegen.builder;
 import com.github.martydashp.javacodegen.model.Generic;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -12,7 +13,9 @@ public final class TypeVariableNameBuilder {
     private final Generic generic;
 
     public static List<TypeVariableName> getTypeVariableNames(final List<Generic> generics) {
-        Objects.requireNonNull(generics);
+        if (generics == null || generics.size() == 0) {
+            return Collections.emptyList();
+        }
 
         return generics.stream()
                        .map(TypeVariableNameBuilder::getTypeVariableName)
@@ -25,10 +28,11 @@ public final class TypeVariableNameBuilder {
 
     protected TypeVariableNameBuilder(final Generic generic) {
         this.generic = generic;
-        this.validate();
     }
 
     protected TypeVariableName build() {
+        Objects.requireNonNull(generic.getName());
+
         if (generic.getTypes() != null) {
             final TypeName[] bounds = generic.getTypes().stream()
                                              .map(TypeBuilder::getTypeName)
@@ -38,9 +42,5 @@ public final class TypeVariableNameBuilder {
         }
 
         return TypeVariableName.get(generic.getName());
-    }
-
-    private void validate() {
-        Objects.requireNonNull(generic.getName());
     }
 }

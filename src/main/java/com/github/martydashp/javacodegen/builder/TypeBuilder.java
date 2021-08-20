@@ -23,16 +23,13 @@ public final class TypeBuilder {
 
     private TypeBuilder(String type) {
         this.type = type;
-        this.validate();
-    }
-
-    private void validate() {
-        if (type == null || type.isBlank()) {
-            throw new IllegalArgumentException("type value is undefined");
-        }
     }
 
     private TypeName build() {
+        if (type == null || type.isBlank()) {
+            throw new IllegalArgumentException("type value is undefined");
+        }
+
         switch (type) {
             case "void":
                 return TypeName.VOID;

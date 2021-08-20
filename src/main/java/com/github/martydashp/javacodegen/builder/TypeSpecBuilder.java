@@ -28,16 +28,13 @@ public final class TypeSpecBuilder {
 
     protected TypeSpecBuilder(final Definition definition) {
         this.definition = definition;
-        this.validate();
-    }
-
-    private void validate() {
-        Objects.requireNonNull(definition);
-        Objects.requireNonNull(definition.getKind());
-        Objects.requireNonNull(definition.getName());
     }
 
     private TypeSpec build() {
+        Objects.requireNonNull(definition);
+        Objects.requireNonNull(definition.getKind());
+        Objects.requireNonNull(definition.getName());
+
         DefinitionKind definitionKind;
 
         try {
@@ -95,7 +92,7 @@ public final class TypeSpecBuilder {
 
     private void addAnnotations() {
         if (definition.getAnnotations() != null) {
-            final List<AnnotationSpec> specs = AnnotationBuilder.getAnnotationSpecs(definition.getAnnotations());
+            final List<AnnotationSpec> specs = AnnotationSpecBuilder.getAnnotationSpecs(definition.getAnnotations());
             builder.addAnnotations(specs);
         }
     }

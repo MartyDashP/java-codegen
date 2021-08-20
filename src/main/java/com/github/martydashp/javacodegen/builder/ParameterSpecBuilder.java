@@ -4,6 +4,7 @@ import com.github.martydashp.javacodegen.model.Parameter;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -16,6 +17,10 @@ public final class ParameterSpecBuilder {
     private ParameterSpec.Builder builder;
 
     public static List<ParameterSpec> getParameterSpecs(final List<Parameter> parameters) {
+        if (parameters == null || parameters.size() == 0) {
+            return Collections.emptyList();
+        }
+
         return parameters.stream()
                          .map(ParameterSpecBuilder::getParameterSpec)
                          .collect(Collectors.toList());
@@ -27,10 +32,11 @@ public final class ParameterSpecBuilder {
 
     protected ParameterSpecBuilder(final Parameter parameter) {
         this.parameter = parameter;
-        this.validate();
     }
 
     protected ParameterSpec build() {
+        Objects.requireNonNull(parameter);
+
         initTypeName();
         initBuilder();
         addModifiers();
@@ -40,17 +46,16 @@ public final class ParameterSpecBuilder {
         return builder.build();
     }
 
-    private void validate() {
-        Objects.requireNonNull(parameter);
-        Objects.requireNonNull(parameter.getName());
-        Objects.requireNonNull(parameter.getType());
-    }
-
     private void initTypeName() {
+        Objects.requireNonNull(parameter.getType());
+
         typeName = TypeBuilder.getTypeName(parameter.getType());
     }
 
     private void initBuilder() {
+        Objects.requireNonNull(typeName);
+        Objects.requireNonNull(parameter.getName());
+
         builder = ParameterSpec.builder(typeName, parameter.getName());
     }
 
@@ -64,7 +69,7 @@ public final class ParameterSpecBuilder {
 
     private void addAnnotations() {
         if (parameter.getAnnotations() != null) {
-            final List<AnnotationSpec> specs = AnnotationBuilder.getAnnotationSpecs(parameter.getAnnotations());
+            final List<AnnotationSpec> specs = AnnotationSpecBuilder.getAnnotationSpecs(parameter.getAnnotations());
             builder.addAnnotations(specs);
         }
     }

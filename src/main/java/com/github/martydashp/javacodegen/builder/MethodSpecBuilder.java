@@ -6,6 +6,7 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeVariableName;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -17,7 +18,9 @@ public final class MethodSpecBuilder {
     private MethodSpec.Builder builder;
 
     public static List<MethodSpec> getMethodSpecs(List<Method> methods) {
-        Objects.requireNonNull(methods);
+        if (methods == null || methods.size() == 0) {
+            return Collections.emptyList();
+        }
 
         return methods.stream()
                       .map(MethodSpecBuilder::getMethodSpec)
@@ -30,13 +33,16 @@ public final class MethodSpecBuilder {
 
     protected MethodSpecBuilder(Method method) {
         this.method = method;
-        this.validate();
     }
 
     protected MethodSpec build() {
+        Objects.requireNonNull(method);
+
         if (method.isConstructor()) {
             builder = MethodSpec.constructorBuilder();
         } else {
+            Objects.requireNonNull(method.getName());
+
             builder = MethodSpec.methodBuilder(method.getName());
             addReturnType();
         }
@@ -52,16 +58,9 @@ public final class MethodSpecBuilder {
         return builder.build();
     }
 
-    private void validate() {
-        Objects.requireNonNull(method);
-        Objects.requireNonNull(method.getName());
-
-        if (!method.isConstructor()) {
-            Objects.requireNonNull(method.getReturnType());
-        }
-    }
-
     private void addReturnType() {
+        Objects.requireNonNull(method.getReturnType());
+
         final TypeName returnType = TypeBuilder.getTypeName(method.getReturnType());
         builder.returns(returnType);
     }
@@ -75,7 +74,7 @@ public final class MethodSpecBuilder {
 
     private void addAnnotations() {
         if (method.getAnnotations() != null) {
-            final List<AnnotationSpec> specs = AnnotationBuilder.getAnnotationSpecs(method.getAnnotations());
+            final List<AnnotationSpec> specs = AnnotationSpecBuilder.getAnnotationSpecs(method.getAnnotations());
             builder.addAnnotations(specs);
         }
     }

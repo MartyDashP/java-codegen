@@ -3,43 +3,44 @@ package com.github.martydashp.javacodegen.builder;
 import com.github.martydashp.javacodegen.model.Annotation;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public final class AnnotationBuilder {
+public final class AnnotationSpecBuilder {
 
     private final Annotation annotation;
     private ClassName className;
     private AnnotationSpec.Builder builder;
 
     public static List<AnnotationSpec> getAnnotationSpecs(final List<Annotation> annotations) {
-        Objects.requireNonNull(annotations);
+        if (annotations == null || annotations.size() == 0) {
+            return Collections.emptyList();
+        }
 
         return annotations.stream()
-                          .map(AnnotationBuilder::getAnnotationSpec)
+                          .map(AnnotationSpecBuilder::getAnnotationSpec)
                           .collect(Collectors.toList());
     }
 
     public static AnnotationSpec getAnnotationSpec(final Annotation annotation) {
-        return new AnnotationBuilder(annotation).build();
+        return new AnnotationSpecBuilder(annotation).build();
     }
 
-    protected AnnotationBuilder(final Annotation annotation) {
+    protected AnnotationSpecBuilder(final Annotation annotation) {
         this.annotation = annotation;
-        this.validate();
     }
 
     protected AnnotationSpec build() {
+        Objects.requireNonNull(annotation);
+        Objects.requireNonNull(annotation.getName());
+
         initClassName();
         initBuilder();
         addValues();
 
         return builder.build();
-    }
-
-    private void validate() {
-        Objects.requireNonNull(annotation.getName());
     }
 
     private void initClassName() {

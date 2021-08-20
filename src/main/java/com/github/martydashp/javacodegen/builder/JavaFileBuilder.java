@@ -16,21 +16,18 @@ public final class JavaFileBuilder {
 
     protected JavaFileBuilder(final Source src) {
         this.source = src;
-        this.validate();
     }
 
     protected JavaFile build() {
+        Objects.requireNonNull(source);
+        Objects.requireNonNull(source.getPackageName());
+
         final TypeSpec typeSpec = TypeSpecBuilder.getTypeSpec(source.getDefinition());
 
         builder = JavaFile.builder(source.getPackageName(), typeSpec);
         addComment();
 
         return builder.build();
-    }
-
-    private void validate() {
-        Objects.requireNonNull(source);
-        Objects.requireNonNull(source.getPackageName());
     }
 
     private void addComment() {
