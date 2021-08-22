@@ -2,7 +2,9 @@ package com.github.martydashp.javacodegen;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import com.github.martydashp.javacodegen.builder.JavaFileBuilder;
 import com.github.martydashp.javacodegen.model.Source;
+import com.squareup.javapoet.JavaFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -15,6 +17,9 @@ final public class JavaCodeGen {
 
     @Parameter(names = {"-targetPath"}, required = true)
     private String targetPath;
+
+    @Parameter(names = {"-specFormat"})
+    private String specFormat;
 
     private File specs;
     private File targetDir;
@@ -60,7 +65,7 @@ final public class JavaCodeGen {
         }
 
         if (!specs.isDirectory()) {
-            generateSources(specs);
+            generateSources(specs, getSpecFormat(specs));
             return;
         }
 
@@ -71,16 +76,48 @@ final public class JavaCodeGen {
         }
 
         for (final File specFile : specFiles) {
-            generateSources(specFile);
+            if (specFile.isDirectory()) {
+                continue;
+            }
+
+            final String specFileFormat = getSpecFormat(specFile);
+
+            if (specFileFormat == null) {
+                continue;
+            }
+
+            generateSources(specFile, specFileFormat);
+
         }
     }
 
-    private void generateSources(final File spec) throws IOException {
-        List<Source> sourceFileList = SpecReader.ofYAML(Objects.requireNonNull(spec));
+    public String getSpecFormat(final File specFile) {
+        if (specFormat != null) {
+            return specFormat;
+        }
+
+        final String fileName = specFile.getName();
+        String extension = null;
+
+        if (fileName.contains(".")) {
+            int index = fileName.lastIndexOf('.');
+            if (index > 0) {
+                extension = fileName.substring(index + 1);
+            }
+        }
+
+        return extension;
+    }
+
+    public void generateSources(final File spec, final String specFormat) throws IOException {
+        Objects.requireNonNull(spec);
+        Objects.requireNonNull(specFormat);
+
+        final List<Source> sourceFileList = SpecReader.of(spec, specFormat);
 
         for (final Source sourceFile : sourceFileList) {
-            Generator.generate(sourceFile, targetDir);
+            final JavaFile javaFile = JavaFileBuilder.getJavaFile(sourceFile);
+            javaFile.writeToFile(Objects.requireNonNull(targetDir));
         }
     }
-
 }
