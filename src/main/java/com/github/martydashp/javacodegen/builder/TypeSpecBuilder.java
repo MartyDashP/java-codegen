@@ -1,10 +1,11 @@
 package com.github.martydashp.javacodegen.builder;
 
 import com.github.martydashp.javacodegen.model.ClassDefinition;
-import com.github.martydashp.javacodegen.model.Definition;
+import com.github.martydashp.javacodegen.model.EnumConstant;
 import com.github.martydashp.javacodegen.model.EnumDefinition;
 import com.github.martydashp.javacodegen.model.InterfaceDefinition;
 import com.squareup.javapoet.AnnotationSpec;
+import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
@@ -19,14 +20,15 @@ public final class TypeSpecBuilder {
 
     protected enum DefinitionKind {CLASS, ENUM, INTERFACE}
 
-    private final Definition definition;
+    private final InterfaceDefinition definition;
     private TypeSpec.Builder builder;
+    private DefinitionKind definitionKind;
 
-    public static TypeSpec getTypeSpec(final Definition definition) {
+    public static TypeSpec getTypeSpec(final InterfaceDefinition definition) {
         return new TypeSpecBuilder(definition).build();
     }
 
-    protected TypeSpecBuilder(final Definition definition) {
+    protected TypeSpecBuilder(final InterfaceDefinition definition) {
         this.definition = definition;
     }
 
@@ -34,8 +36,6 @@ public final class TypeSpecBuilder {
         Objects.requireNonNull(definition);
         Objects.requireNonNull(definition.getKind());
         Objects.requireNonNull(definition.getName());
-
-        DefinitionKind definitionKind;
 
         try {
             definitionKind = DefinitionKind.valueOf(definition.getKind().toUpperCase());
@@ -49,22 +49,43 @@ public final class TypeSpecBuilder {
             case ENUM:
                 return buildEnumSpec((EnumDefinition) definition);
 
-            case INTERFACE:
-                return buildInterfaceSpec((InterfaceDefinition) definition);
-
             case CLASS:
                 return buildClassSpec((ClassDefinition) definition);
+
+            case INTERFACE:
+                return buildInterfaceSpec(definition);
         }
 
         throw new RuntimeException("Unknown definition type");
     }
 
     private TypeSpec buildEnumSpec(final EnumDefinition enumDefinition) {
-        throw new RuntimeException("method is not implemented");
+        builder = TypeSpec.enumBuilder(enumDefinition.getName());
+
+        addModifiers();
+        addJavaDoc();
+        addAnnotations();
+        addTypeVariables();
+        addMethods();
+        addSuperInterfaces();
+        addProperties();
+        addEnumConstant();
+
+        return builder.build();
     }
 
-    private TypeSpec buildInterfaceSpec(final InterfaceDefinition enumDefinition) {
-        throw new RuntimeException("method is not implemented");
+    private TypeSpec buildInterfaceSpec(final InterfaceDefinition interfaceDefinition) {
+        builder = TypeSpec.interfaceBuilder(interfaceDefinition.getName());
+
+        addModifiers();
+        addJavaDoc();
+        addAnnotations();
+        addTypeVariables();
+        addMethods();
+        addSuperInterfaces();
+        addProperties();
+
+        return builder.build();
     }
 
     private TypeSpec buildClassSpec(final ClassDefinition classDefinition) {
@@ -73,7 +94,6 @@ public final class TypeSpecBuilder {
         addModifiers();
         addJavaDoc();
         addAnnotations();
-        addJavaDoc();
         addTypeVariables();
         addMethods();
         addSuperInterfaces();
@@ -86,6 +106,15 @@ public final class TypeSpecBuilder {
     private void addModifiers() {
         if (definition.getModifiers() != null) {
             final Modifier[] modifiers = ModifierBuilder.getModifiers(definition.getModifiers());
+
+            if (definitionKind.equals(DefinitionKind.ENUM)) {
+                for (final Modifier modifier : builder.modifiers) {
+                    if (modifier.equals(Modifier.FINAL)) {
+                        throw new RuntimeException("Enum definition can't be final");
+                    }
+                }
+            }
+
             builder.addModifiers(modifiers);
         }
     }
@@ -105,16 +134,15 @@ public final class TypeSpecBuilder {
 
     private void addTypeVariables() {
         if (definition.getGenerics() != null) {
-            List<TypeVariableName> typeVariables = TypeVariableNameBuilder.getTypeVariableNames(definition.getGenerics());
+            List<TypeVariableName> typeVariables = TypeVariableNameBuilder.getTypeVariableNames(
+                definition.getGenerics());
             builder.addTypeVariables(typeVariables);
         }
     }
 
     private void addProperties() {
-        final ClassDefinition classDefinition = (ClassDefinition) definition;
-
-        if (classDefinition.getProperties() != null) {
-            final List<FieldSpec> fields = FieldSpecBuilder.getFieldSpecs(classDefinition.getProperties());
+        if (definition.getProperties() != null) {
+            final List<FieldSpec> fields = FieldSpecBuilder.getFieldSpecs(definition.getProperties());
             builder.addFields(fields);
         }
     }
@@ -127,8 +155,8 @@ public final class TypeSpecBuilder {
     }
 
     private void addSuperInterfaces() {
-        if (definition.getSuperInterface() != null) {
-            final List<TypeName> interfaces = definition.getSuperInterface()
+        if (definition.getSuperInterfaces() != null) {
+            final List<TypeName> interfaces = definition.getSuperInterfaces()
                                                         .stream()
                                                         .map(TypeBuilder::getTypeName)
                                                         .collect(Collectors.toList());
@@ -142,6 +170,25 @@ public final class TypeSpecBuilder {
         if (classDefinition.getSuperClassName() != null) {
             final TypeName className = TypeBuilder.getTypeName(classDefinition.getSuperClassName());
             builder.superclass(className);
+        }
+    }
+
+    private void addEnumConstant() {
+        final EnumDefinition enumDefinition = (EnumDefinition) definition;
+
+        if (enumDefinition.getConstants() != null) {
+            for (EnumConstant enumConstant : enumDefinition.getConstants()) {
+                Objects.requireNonNull(enumConstant.getName());
+
+                String constParams = "";
+
+                if (enumConstant.getParameters() != null) {
+                    constParams = String.join(", ", enumConstant.getParameters());
+                }
+
+                builder.addEnumConstant(enumConstant.getName(),
+                    TypeSpec.anonymousClassBuilder(CodeBlock.of(constParams)).build());
+            }
         }
     }
 

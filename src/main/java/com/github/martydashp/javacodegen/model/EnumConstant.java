@@ -6,11 +6,11 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class Generic {
+public class EnumConstant {
 
     private String name;
 
-    @JacksonXmlElementWrapper(localName = "types")
-    @JacksonXmlProperty(localName = "type")
-    private List<String> types;
+    @JacksonXmlElementWrapper(localName = "parameters")
+    @JacksonXmlProperty(localName = "parameter")
+    private List<String> parameters;
 }

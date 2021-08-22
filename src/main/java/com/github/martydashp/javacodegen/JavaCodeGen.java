@@ -65,7 +65,7 @@ final public class JavaCodeGen {
         }
 
         if (!specs.isDirectory()) {
-            generateSources(specs);
+            generateSources(specs, getSpecFormat(specs));
             return;
         }
 
@@ -76,27 +76,44 @@ final public class JavaCodeGen {
         }
 
         for (final File specFile : specFiles) {
-            generateSources(specFile);
+            if (specFile.isDirectory()) {
+                continue;
+            }
+
+            final String specFileFormat = getSpecFormat(specFile);
+
+            if (specFileFormat == null) {
+                continue;
+            }
+
+            generateSources(specFile, specFileFormat);
+
         }
     }
 
     public String getSpecFormat(final File specFile) {
-        if (specFormat == null) {
-            final String fileName = specFile.getName();
+        if (specFormat != null) {
+            return specFormat;
+        }
 
-            if (fileName.contains(".")) {
-                int index = fileName.lastIndexOf('.');
-                if (index > 0) {
-                    specFormat = fileName.substring(index + 1);
-                }
+        final String fileName = specFile.getName();
+        String extension = null;
+
+        if (fileName.contains(".")) {
+            int index = fileName.lastIndexOf('.');
+            if (index > 0) {
+                extension = fileName.substring(index + 1);
             }
         }
 
-        return specFormat;
+        return extension;
     }
 
-    public void generateSources(final File spec) throws IOException {
-        List<Source> sourceFileList = SpecReader.of(Objects.requireNonNull(spec), getSpecFormat(spec));
+    public void generateSources(final File spec, final String specFormat) throws IOException {
+        Objects.requireNonNull(spec);
+        Objects.requireNonNull(specFormat);
+
+        final List<Source> sourceFileList = SpecReader.of(spec, specFormat);
 
         for (final Source sourceFile : sourceFileList) {
             final JavaFile javaFile = JavaFileBuilder.getJavaFile(sourceFile);
