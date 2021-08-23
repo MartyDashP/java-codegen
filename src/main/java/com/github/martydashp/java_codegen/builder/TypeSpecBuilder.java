@@ -1,9 +1,9 @@
-package com.github.martydashp.javacodegen.builder;
+package com.github.martydashp.java_codegen.builder;
 
-import com.github.martydashp.javacodegen.model.ClassDefinition;
-import com.github.martydashp.javacodegen.model.EnumConstant;
-import com.github.martydashp.javacodegen.model.EnumDefinition;
-import com.github.martydashp.javacodegen.model.InterfaceDefinition;
+import com.github.martydashp.java_codegen.model.ClassDefinition;
+import com.github.martydashp.java_codegen.model.EnumConstant;
+import com.github.martydashp.java_codegen.model.EnumDefinition;
+import com.github.martydashp.java_codegen.model.InterfaceDefinition;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.CodeBlock;
 import com.squareup.javapoet.FieldSpec;

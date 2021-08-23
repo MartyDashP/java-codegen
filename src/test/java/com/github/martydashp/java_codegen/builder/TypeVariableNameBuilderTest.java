@@ -1,8 +1,8 @@
-package com.github.martydashp.javacodegen.builder;
+package com.github.martydashp.java_codegen.builder;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import com.github.martydashp.javacodegen.model.Generic;
+import com.github.martydashp.java_codegen.model.Generic;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeVariableName;
 import java.util.ArrayList;

@@ -1,6 +1,6 @@
-package com.github.martydashp.javacodegen.builder;
+package com.github.martydashp.java_codegen.builder;
 
-import com.github.martydashp.javacodegen.model.Parameter;
+import com.github.martydashp.java_codegen.model.Parameter;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ParameterSpec;
 import com.squareup.javapoet.TypeName;

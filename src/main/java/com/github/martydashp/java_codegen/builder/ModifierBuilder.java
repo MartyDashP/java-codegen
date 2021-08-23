@@ -1,4 +1,4 @@
-package com.github.martydashp.javacodegen.builder;
+package com.github.martydashp.java_codegen.builder;
 
 import java.util.List;
 import javax.lang.model.element.Modifier;

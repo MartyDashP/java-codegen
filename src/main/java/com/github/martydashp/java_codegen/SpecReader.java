@@ -1,9 +1,9 @@
-package com.github.martydashp.javacodegen;
+package com.github.martydashp.java_codegen;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.github.martydashp.javacodegen.model.Source;
+import com.github.martydashp.java_codegen.model.Source;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;

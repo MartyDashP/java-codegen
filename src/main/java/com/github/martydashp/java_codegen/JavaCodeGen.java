@@ -1,9 +1,9 @@
-package com.github.martydashp.javacodegen;
+package com.github.martydashp.java_codegen;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import com.github.martydashp.javacodegen.builder.JavaFileBuilder;
-import com.github.martydashp.javacodegen.model.Source;
+import com.github.martydashp.java_codegen.builder.JavaFileBuilder;
+import com.github.martydashp.java_codegen.model.Source;
 import com.squareup.javapoet.JavaFile;
 import java.io.File;
 import java.io.IOException;

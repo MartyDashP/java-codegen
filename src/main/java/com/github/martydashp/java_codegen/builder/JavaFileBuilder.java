@@ -1,6 +1,6 @@
-package com.github.martydashp.javacodegen.builder;
+package com.github.martydashp.java_codegen.builder;
 
-import com.github.martydashp.javacodegen.model.Source;
+import com.github.martydashp.java_codegen.model.Source;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.TypeSpec;
 import java.util.Objects;

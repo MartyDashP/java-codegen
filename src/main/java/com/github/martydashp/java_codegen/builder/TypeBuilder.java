@@ -1,4 +1,4 @@
-package com.github.martydashp.javacodegen.builder;
+package com.github.martydashp.java_codegen.builder;
 
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeName;

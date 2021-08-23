@@ -1,6 +1,6 @@
-package com.github.martydashp.javacodegen.builder;
+package com.github.martydashp.java_codegen.builder;
 
-import com.github.martydashp.javacodegen.model.Annotation;
+import com.github.martydashp.java_codegen.model.Annotation;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import java.util.Collections;

@@ -1,4 +1,4 @@
-package com.github.martydashp.javacodegen;
+package com.github.martydashp.java_codegen;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -6,15 +6,15 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
-import com.github.martydashp.javacodegen.model.Annotation;
-import com.github.martydashp.javacodegen.model.ClassDefinition;
-import com.github.martydashp.javacodegen.model.EnumConstant;
-import com.github.martydashp.javacodegen.model.EnumDefinition;
-import com.github.martydashp.javacodegen.model.InterfaceDefinition;
-import com.github.martydashp.javacodegen.model.Method;
-import com.github.martydashp.javacodegen.model.Parameter;
-import com.github.martydashp.javacodegen.model.Property;
-import com.github.martydashp.javacodegen.model.Source;
+import com.github.martydashp.java_codegen.model.Annotation;
+import com.github.martydashp.java_codegen.model.ClassDefinition;
+import com.github.martydashp.java_codegen.model.EnumConstant;
+import com.github.martydashp.java_codegen.model.EnumDefinition;
+import com.github.martydashp.java_codegen.model.InterfaceDefinition;
+import com.github.martydashp.java_codegen.model.Method;
+import com.github.martydashp.java_codegen.model.Parameter;
+import com.github.martydashp.java_codegen.model.Property;
+import com.github.martydashp.java_codegen.model.Source;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -74,7 +74,7 @@ public class SpecGeneratorTest {
         classDefinition.setSuperInterfaces(Collections.singletonList("java.io.Serializable"));
 
         final Source source = new Source();
-        source.setPackageName("com.github.martydashp.javacodegen.test");
+        source.setPackageName("com.github.martydashp.java_codegen.test");
         source.setDefinition(classDefinition);
         source.setComment("it's test source file");
 
@@ -133,7 +133,7 @@ public class SpecGeneratorTest {
         enumDefinition.setConstants(Arrays.asList(enumConstant1, enumConstant2));
 
         final Source source = new Source();
-        source.setPackageName("com.github.martydashp.javacodegen.test");
+        source.setPackageName("com.github.martydashp.java_codegen.test");
         source.setDefinition(enumDefinition);
 
         return source;
@@ -193,7 +193,7 @@ public class SpecGeneratorTest {
         interfaceDefinition.setSuperInterfaces(Collections.singletonList("java.io.Serializable"));
 
         final Source source = new Source();
-        source.setPackageName("com.github.martydashp.javacodegen.test");
+        source.setPackageName("com.github.martydashp.java_codegen.test");
         source.setDefinition(interfaceDefinition);
 
         return source;

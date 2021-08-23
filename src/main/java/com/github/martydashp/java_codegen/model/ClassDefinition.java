@@ -1,4 +1,4 @@
-package com.github.martydashp.javacodegen.model;
+package com.github.martydashp.java_codegen.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;

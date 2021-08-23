@@ -1,4 +1,4 @@
-package com.github.martydashp.javacodegen.model;
+package com.github.martydashp.java_codegen.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
@@ -6,12 +6,11 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class Property {
+public class Parameter {
 
-    private String type;
     private String name;
+    private String type;
     private String javaDoc;
-    private String initValue;
 
     @JacksonXmlElementWrapper(localName = "modifiers")
     @JacksonXmlProperty(localName = "modifier")

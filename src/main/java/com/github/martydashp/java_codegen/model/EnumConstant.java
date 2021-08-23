@@ -1,4 +1,4 @@
-package com.github.martydashp.javacodegen.model;
+package com.github.martydashp.java_codegen.model;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
