@@ -36,6 +36,8 @@ class TypeVariableNameBuilderTest {
         generic.setName("com.github.martydashp.TestGeneric");
         generics.add(generic);
 
+        result = TypeVariableNameBuilder.getTypeVariableNames(generics);
+
         assertEquals(2, result.size());
     }
 
