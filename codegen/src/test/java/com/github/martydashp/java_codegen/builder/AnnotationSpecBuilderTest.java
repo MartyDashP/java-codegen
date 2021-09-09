@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.martydashp.java_codegen.model.Annotation;
+import com.github.martydashp.java_codegen.model.Entry;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import java.util.ArrayList;
@@ -54,7 +55,7 @@ class AnnotationSpecBuilderTest {
 
         annotation = new Annotation();
         annotation.setName("TestAnnotation2");
-        annotation.setValues(Collections.singletonMap("key1", "value1 = {}"));
+        annotation.setElements(Collections.singletonList(new Entry("key1", "value1 = {}")));
 
         result = AnnotationSpecBuilder.getAnnotationSpec(annotation);
 

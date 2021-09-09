@@ -1,6 +1,7 @@
 package com.github.martydashp.java_codegen.builder;
 
 import com.github.martydashp.java_codegen.model.Annotation;
+import com.github.martydashp.java_codegen.model.Entry;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import java.util.Collections;
@@ -52,9 +53,14 @@ public final class AnnotationSpecBuilder {
     }
 
     private void addValues() {
-        if (annotation.getValues() != null) {
-            annotation.getValues()
-                      .forEach(builder::addMember);
+        if (annotation.getElements() != null) {
+
+            for (final Entry element : annotation.getElements()) {
+                Objects.requireNonNull(element);
+                Objects.requireNonNull(element.getKey());
+
+                builder.addMember(element.getKey(), element.getValue());
+            }
         }
     }
 }

@@ -8,6 +8,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.github.martydashp.java_codegen.model.Annotation;
 import com.github.martydashp.java_codegen.model.ClassDefinition;
+import com.github.martydashp.java_codegen.model.Entry;
 import com.github.martydashp.java_codegen.model.EnumConstant;
 import com.github.martydashp.java_codegen.model.EnumDefinition;
 import com.github.martydashp.java_codegen.model.InterfaceDefinition;
@@ -20,8 +21,6 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 public class SpecGeneratorTest {
@@ -46,11 +45,10 @@ public class SpecGeneratorTest {
 
         final Annotation annotation = new Annotation();
         annotation.setName("javax.annotation.processing.Generated");
-        final Map<String, String> annotationValues = new HashMap<>();
-        annotationValues.put("value", "\"JavaCodeGen\"");
-        annotationValues.put("date", String.format("\"%s\"", LocalDateTime.now()));
-        annotationValues.put("comments", "\"this is class was generated\"");
-        annotation.setValues(annotationValues);
+        annotation.setElements(Arrays.asList(
+            new Entry("value", "\"JavaCodeGen\""),
+            new Entry("date", String.format("\"%s\"", LocalDateTime.now())),
+            new Entry("comments", "\"this is class was generated\"")));
 
         final Property property1 = new Property();
         property1.setName("firstProperty");
@@ -100,11 +98,10 @@ public class SpecGeneratorTest {
 
         final Annotation annotation = new Annotation();
         annotation.setName("javax.annotation.processing.Generated");
-        final Map<String, String> annotationValues = new HashMap<>();
-        annotationValues.put("value", "\"JavaCodeGen\"");
-        annotationValues.put("date", String.format("\"%s\"", LocalDateTime.now()));
-        annotationValues.put("comments", "\"this is class was generated\"");
-        annotation.setValues(annotationValues);
+        annotation.setElements(Arrays.asList(
+            new Entry("value", "\"JavaCodeGen\""),
+            new Entry("date", String.format("\"%s\"", LocalDateTime.now())),
+            new Entry("comments", "\"this is enum was generated\"")));
 
         final Property property1 = new Property();
         property1.setName("stringValue");
@@ -165,11 +162,10 @@ public class SpecGeneratorTest {
 
         final Annotation annotation = new Annotation();
         annotation.setName("javax.annotation.processing.Generated");
-        final Map<String, String> annotationValues = new HashMap<>();
-        annotationValues.put("value", "\"JavaCodeGen\"");
-        annotationValues.put("date", String.format("\"%s\"", LocalDateTime.now()));
-        annotationValues.put("comments", "\"this is class was generated\"");
-        annotation.setValues(annotationValues);
+        annotation.setElements(Arrays.asList(
+            new Entry("value", "\"JavaCodeGen\""),
+            new Entry("date", String.format("\"%s\"", LocalDateTime.now())),
+            new Entry("comments", "\"this is interface was generated\"")));
 
         final Property property1 = new Property();
         property1.setName("stringValue");

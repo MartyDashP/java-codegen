@@ -1,6 +1,6 @@
 .idea
-.gradle
-/build/
+/codegen/.gradle
+/codegen/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -10,4 +10,4 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
-/src/test/resources/generated-data/*
+/codegen/src/test/resources/generated-data/*
