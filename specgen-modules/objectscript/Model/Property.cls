@@ -1,7 +1,7 @@
 Class JavaSpec.Model.Property Extends (%RegisteredObject, %XML.Adaptor)
 {
 
-Property Type As %String(XMLNAME = "type");
+Property Type As JavaSpec.Model.Type(XMLNAME = "type");
 
 Property Name As %String(XMLNAME = "name");
 

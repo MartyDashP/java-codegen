@@ -3,7 +3,7 @@ Class JavaSpec.Model.Method Extends (%RegisteredObject, %XML.Adaptor)
 
 Property Name As %String(XMLNAME = "name");
 
-Property ReturnType As %String(XMLNAME = "returnType");
+Property ReturnType As JavaSpec.Model.Type(XMLNAME = "returnType");
 
 Property Code As %String(XMLNAME = "code");
 

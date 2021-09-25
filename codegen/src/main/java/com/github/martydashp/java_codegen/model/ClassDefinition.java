@@ -7,5 +7,5 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ClassDefinition extends InterfaceDefinition {
 
-    private String superClassName;
+    private Type superClassName;
 }

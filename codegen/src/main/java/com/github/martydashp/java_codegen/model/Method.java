@@ -13,7 +13,7 @@ public class Method {
     static public String constructorName = "#constructor";
 
     private String name;
-    private String returnType;
+    private Type returnType;
     private String code;
     private String javaDoc;
 

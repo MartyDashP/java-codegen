@@ -3,6 +3,7 @@ package com.github.martydashp.java_codegen.builder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.github.martydashp.java_codegen.model.Generic;
+import com.github.martydashp.java_codegen.model.Type;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.TypeVariableName;
 import java.util.ArrayList;
@@ -29,7 +30,7 @@ class TypeVariableNameBuilderTest {
 
         Generic generic = new Generic();
         generic.setName("TestGeneric");
-        generic.setTypes(Collections.singletonList("TestType"));
+        generic.setTypes(Collections.singletonList(new Type("TestType")));
         generics.add(generic);
 
         generic = new Generic();
@@ -45,7 +46,7 @@ class TypeVariableNameBuilderTest {
     void getTypeVariableName() {
         Generic generic = new Generic();
         generic.setName("TestGeneric");
-        generic.setTypes(Collections.singletonList("TestType"));
+        generic.setTypes(Collections.singletonList(new Type("TestType")));
 
         TypeVariableName result = TypeVariableNameBuilder.getTypeVariableName(generic);
 
@@ -55,7 +56,8 @@ class TypeVariableNameBuilderTest {
 
         generic = new Generic();
         generic.setName("com.github.martydashp.TestGeneric");
-        generic.setTypes(Arrays.asList("com.github.martydashp.TestType1", "com.github.martydashp.TestType2", "TestType3"));
+        generic.setTypes(Arrays.asList(new Type("com.github.martydashp.TestType1"),
+            new Type("com.github.martydashp.TestType2"), new Type("TestType3")));
 
         result = TypeVariableNameBuilder.getTypeVariableName(generic);
 
@@ -77,7 +79,7 @@ class TypeVariableNameBuilderTest {
     @Test
     void getTypeVariableNameException() {
         Generic generic = new Generic();
-        generic.setTypes(Collections.singletonList("TestType"));
+        generic.setTypes(Collections.singletonList(new Type("TestType")));
 
         assertThrows(NullPointerException.class, () -> TypeVariableNameBuilder.getTypeVariableName(generic));
     }

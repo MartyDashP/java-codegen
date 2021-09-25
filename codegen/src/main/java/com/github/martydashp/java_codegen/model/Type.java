@@ -6,11 +6,18 @@ import java.util.List;
 import lombok.Data;
 
 @Data
-public class Generic {
+public class Type {
 
     private String name;
 
-    @JacksonXmlElementWrapper(localName = "types")
-    @JacksonXmlProperty(localName = "type")
-    private List<Type> types;
+    @JacksonXmlElementWrapper(localName = "arguments")
+    @JacksonXmlProperty(localName = "argument")
+    private List<Type> arguments;
+
+    public Type() {
+    }
+
+    public Type(String name) {
+        this.name = name;
+    }
 }

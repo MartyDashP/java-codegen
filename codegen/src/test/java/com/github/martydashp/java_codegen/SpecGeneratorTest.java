@@ -16,6 +16,7 @@ import com.github.martydashp.java_codegen.model.Method;
 import com.github.martydashp.java_codegen.model.Parameter;
 import com.github.martydashp.java_codegen.model.Property;
 import com.github.martydashp.java_codegen.model.Source;
+import com.github.martydashp.java_codegen.model.Type;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -37,7 +38,7 @@ public class SpecGeneratorTest {
         method.setName("main");
         method.setCode("System.out.println(\"Hello world\");");
         method.setModifiers(Arrays.asList("public", "static"));
-        method.setReturnType("void");
+        method.setReturnType(new Type("void"));
 
         final Method constructor = new Method();
         constructor.setName(Method.constructorName);
@@ -50,15 +51,22 @@ public class SpecGeneratorTest {
             new Entry("date", String.format("\"%s\"", LocalDateTime.now())),
             new Entry("comments", "\"this is class was generated\"")));
 
+        final Type subType = new Type("java.util.List");
+        subType.setArguments(Collections.singletonList(new Type("Integer")));
+
+        final Type type = new Type();
+        type.setName("java.util.Map");
+        type.setArguments(Arrays.asList(new Type("String"), subType));
+
         final Property property1 = new Property();
         property1.setName("firstProperty");
-        property1.setInitValue("\"string value\"");
-        property1.setType("String");
+
+        property1.setType(type);
         property1.setModifiers(Collections.singletonList("private"));
 
         final Property property2 = new Property();
         property2.setName("secondProperty");
-        property2.setType("int");
+        property2.setType(new Type("int"));
         property2.setModifiers(Arrays.asList("private", "static"));
 
         final ClassDefinition classDefinition = new ClassDefinition();
@@ -68,8 +76,8 @@ public class SpecGeneratorTest {
         classDefinition.setAnnotations(Collections.singletonList(annotation));
         classDefinition.setMethods(Arrays.asList(method, constructor));
         classDefinition.setProperties(Arrays.asList(property1, property2));
-        classDefinition.setSuperClassName("String");
-        classDefinition.setSuperInterfaces(Collections.singletonList("java.io.Serializable"));
+        classDefinition.setSuperClassName(new Type("String"));
+        classDefinition.setSuperInterfaces(Collections.singletonList(new Type("java.io.Serializable")));
 
         final Source source = new Source();
         source.setPackageName("com.github.martydashp.java_codegen.test");
@@ -82,12 +90,12 @@ public class SpecGeneratorTest {
     private Source getEnumSpecModel() {
         final Parameter parameter1 = new Parameter();
         parameter1.setName("stringValue");
-        parameter1.setType("String");
+        parameter1.setType(new Type("String"));
         parameter1.setModifiers(Collections.singletonList("final"));
 
         final Parameter parameter2 = new Parameter();
         parameter2.setName("numberValue");
-        parameter2.setType("int");
+        parameter2.setType(new Type("int"));
         parameter2.setModifiers(Collections.singletonList("final"));
 
         final Method constructor = new Method();
@@ -105,11 +113,11 @@ public class SpecGeneratorTest {
 
         final Property property1 = new Property();
         property1.setName("stringValue");
-        property1.setType("String");
+        property1.setType(new Type("String"));
 
         final Property property2 = new Property();
         property2.setName("numberValue");
-        property2.setType("Integer");
+        property2.setType(new Type("Integer"));
 
         final EnumConstant enumConstant1 = new EnumConstant();
         enumConstant1.setName("ENUM1");
@@ -126,7 +134,7 @@ public class SpecGeneratorTest {
         enumDefinition.setAnnotations(Collections.singletonList(annotation));
         enumDefinition.setMethods(Collections.singletonList(constructor));
         enumDefinition.setProperties(Arrays.asList(property1, property2));
-        enumDefinition.setSuperInterfaces(Collections.singletonList("java.io.Serializable"));
+        enumDefinition.setSuperInterfaces(Collections.singletonList(new Type("java.io.Serializable")));
         enumDefinition.setConstants(Arrays.asList(enumConstant1, enumConstant2));
 
         final Source source = new Source();
@@ -139,24 +147,24 @@ public class SpecGeneratorTest {
     private Source getInterfaceSpecModel() {
         final Parameter parameter1 = new Parameter();
         parameter1.setName("stringValue");
-        parameter1.setType("String");
+        parameter1.setType(new Type("String"));
         parameter1.setModifiers(Collections.singletonList("final"));
 
         final Parameter parameter2 = new Parameter();
         parameter2.setName("numberValue");
-        parameter2.setType("int");
+        parameter2.setType(new Type("int"));
         parameter2.setModifiers(Collections.singletonList("final"));
 
         final Method method1 = new Method();
         method1.setName("defaultMethod");
-        method1.setReturnType("void");
+        method1.setReturnType(new Type("void"));
         method1.setParameters(Arrays.asList(parameter1, parameter2));
         method1.setModifiers(Arrays.asList("public", "default"));
         method1.setCode("System.out.println(\"it's default method\");");
 
         final Method method2 = new Method();
         method2.setName("method");
-        method2.setReturnType("void");
+        method2.setReturnType(new Type("void"));
         method2.setParameters(Arrays.asList(parameter1, parameter2));
         method2.setModifiers(Arrays.asList("public", "abstract"));
 
@@ -169,13 +177,13 @@ public class SpecGeneratorTest {
 
         final Property property1 = new Property();
         property1.setName("stringValue");
-        property1.setType("String");
+        property1.setType(new Type("String"));
         property1.setModifiers(Arrays.asList("PUBLIC", "STATIC", "FINAL"));
         property1.setInitValue("\"FINAL VALUE\"");
 
         final Property property2 = new Property();
         property2.setName("numberValue");
-        property2.setType("Integer");
+        property2.setType(new Type("Integer"));
         property2.setInitValue("100");
         property2.setModifiers(Arrays.asList("PUBLIC", "STATIC", "FINAL"));
 
@@ -186,7 +194,7 @@ public class SpecGeneratorTest {
         interfaceDefinition.setAnnotations(Collections.singletonList(annotation));
         interfaceDefinition.setMethods(Arrays.asList(method1, method2));
         interfaceDefinition.setProperties(Arrays.asList(property1, property2));
-        interfaceDefinition.setSuperInterfaces(Collections.singletonList("java.io.Serializable"));
+        interfaceDefinition.setSuperInterfaces(Collections.singletonList(new Type("java.io.Serializable")));
 
         final Source source = new Source();
         source.setPackageName("com.github.martydashp.java_codegen.test");

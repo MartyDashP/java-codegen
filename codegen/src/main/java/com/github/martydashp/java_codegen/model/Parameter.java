@@ -9,7 +9,7 @@ import lombok.Data;
 public class Parameter {
 
     private String name;
-    private String type;
+    private Type type;
     private String javaDoc;
 
     @JacksonXmlElementWrapper(localName = "modifiers")

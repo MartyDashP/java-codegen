@@ -1,11 +1,13 @@
 package com.github.martydashp.java_codegen.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import java.util.List;
 import lombok.Data;
 
 @Data
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class InterfaceDefinition {
 
     private String kind;
@@ -18,7 +20,7 @@ public class InterfaceDefinition {
 
     @JacksonXmlElementWrapper(localName = "superInterfaces")
     @JacksonXmlProperty(localName = "superInterface")
-    private List<String> superInterfaces;
+    private List<Type> superInterfaces;
 
     @JacksonXmlElementWrapper(localName = "annotations")
     @JacksonXmlProperty(localName = "annotation")

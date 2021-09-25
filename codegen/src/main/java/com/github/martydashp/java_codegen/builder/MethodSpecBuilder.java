@@ -1,6 +1,7 @@
 package com.github.martydashp.java_codegen.builder;
 
 import com.github.martydashp.java_codegen.model.Method;
+import com.github.martydashp.java_codegen.model.Type;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.ParameterSpec;
@@ -109,6 +110,7 @@ public final class MethodSpecBuilder {
         if (method.getExceptions() != null) {
             final List<TypeName> exceptionTypes = method.getExceptions()
                                                         .stream()
+                                                        .map(Type::new)
                                                         .map(TypeBuilder::getTypeName)
                                                         .collect(Collectors.toList());
             builder.addExceptions(exceptionTypes);

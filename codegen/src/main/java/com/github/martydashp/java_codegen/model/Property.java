@@ -8,7 +8,7 @@ import lombok.Data;
 @Data
 public class Property {
 
-    private String type;
+    private Type type;
     private String name;
     private String javaDoc;
     private String initValue;
