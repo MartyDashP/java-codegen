@@ -1,0 +1,39 @@
+plugins {
+    id 'groovy'
+    id 'maven-publish'
+}
+
+group 'io.github.martydashp'
+archivesBaseName = 'java-codegen-gradle-plugin'
+version '1.0.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url "https://s01.oss.sonatype.org/content/repositories/snapshots/"
+    }
+}
+
+dependencies {
+    implementation gradleApi()
+    implementation localGroovy()
+
+    implementation 'io.github.martydashp:java-codegen:1.0.0-SNAPSHOT'
+    implementation 'org.codehaus.groovy:groovy-all:3.0.5'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.java
+
+            artifactId = "${project.archivesBaseName}"
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+}

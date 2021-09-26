@@ -10,4 +10,7 @@ gradle-app.setting
 
 # Cache of project
 .gradletasknamecache
+
 /codegen/src/test/resources/generated-data/*
+/plugins/java-codegen-gradle-plugin/.gradle
+/plugins/java-codegen-gradle-plugin/build/
