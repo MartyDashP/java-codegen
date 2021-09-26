@@ -1,52 +1,105 @@
 plugins {
-    id 'java'
-    id 'maven-publish'
+  id 'java'
+  id 'maven-publish'
+  id 'signing'
 }
 
-group 'com.github.martydashp'
+group 'io.github.martydashp'
+archivesBaseName = 'java-codegen'
 version '1.0.0-SNAPSHOT'
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-    implementation group: 'com.squareup', name: 'javapoet', version: '1.13.0'
+  implementation group: 'com.squareup', name: 'javapoet', version: '1.13.0'
 
-    implementation group: 'com.beust', name: 'jcommander', version: '1.81'
+  implementation group: 'com.beust', name: 'jcommander', version: '1.81'
 
-    compileOnly 'org.projectlombok:lombok:1.18.20'
-    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+  compileOnly 'org.projectlombok:lombok:1.18.20'
+  annotationProcessor 'org.projectlombok:lombok:1.18.20'
 
-    implementation group: 'org.yaml', name: 'snakeyaml', version: '1.29'
-    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.12.4'
-    implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.12.4'
+  implementation group: 'org.yaml', name: 'snakeyaml', version: '1.29'
+  implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-yaml', version: '2.12.4'
+  implementation group: 'com.fasterxml.jackson.dataformat', name: 'jackson-dataformat-xml', version: '2.12.4'
 
-    testCompileOnly 'org.projectlombok:lombok:1.18.20'
-    testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
+  testCompileOnly 'org.projectlombok:lombok:1.18.20'
+  testAnnotationProcessor 'org.projectlombok:lombok:1.18.20'
+  testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
+  testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
 }
 
 test {
-    useJUnitPlatform()
+  useJUnitPlatform()
+}
+
+task javadocJar(type: Jar) {
+  archiveClassifier.set('javadoc')
+  from javadoc
+}
+
+task sourcesJar(type: Jar) {
+  archiveClassifier.set('sources')
+  from sourceSets.main.allSource
 }
 
 publishing {
-    repositories {
+  publications {
+    maven(MavenPublication) {
+      from components.java
+
+      artifact javadocJar
+      artifact sourcesJar
+
+      groupId = "${project.group}"
+      artifactId = "${project.archivesBaseName}"
+      version = "${project.version}"
+
+      pom {
+        name = "${project.name}"
+        description = "The project is designed to generate Java source code from the metadata described in the files"
+        url = "https://github.com/MartyDashP/java-codegen"
+
+        scm {
+          connection = "scm:git:https://github.com/MartyDashP/java-codegen.git"
+          url = "https://github.com/MartyDashP/java-codegen.git"
+        }
+
+        developers {
+          developer {
+            id = "MartyDashP"
+            name = "Pavel Martynov"
+            email = "pavel.martynoff@gmail.com"
+          }
+        }
+
+        licenses {
+          license {
+            name = "MIT License"
+            url = "https://github.com/MartyDashP/java-codegen/blob/main/LICENSE"
+          }
+        }
+      }
+
+      repositories {
         maven {
-            name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/MartyDashP/java-codegen")
-            credentials {
-                username = System.getenv("GITHUB_ACTOR")
-                password = System.getenv("GITHUB_TOKEN")
-            }
+          def releasesRepoUrl = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
+          def snapshotsRepoUrl = 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+
+          name = 'sonatype'
+          url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
+          credentials {
+            username = findProperty("sonatype.username")
+            password = findProperty("sonatype.password")
+          }
         }
+      }
     }
-    publications {
-        JavaCodeGen(MavenPublication) {
-            artifactId = 'java-codegen'
-            from components.java
-        }
-    }
+  }
 }
+
+signing {
+  sign publishing.publications
+}
+
