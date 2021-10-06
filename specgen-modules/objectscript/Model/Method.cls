@@ -15,7 +15,7 @@ Property Annotations As list Of JavaSpec.Model.Annotation(XMLITEMNAME = "annotat
 
 Property Exceptions As list Of %String(XMLITEMNAME = "exception", XMLNAME = "exceptions");
 
-Property Parameters As list Of JavaSpec.Model.Parameters(XMLITEMNAME = "parameter", XMLNAME = "parameters");
+Property Parameters As list Of JavaSpec.Model.Parameter(XMLITEMNAME = "parameter", XMLNAME = "parameters");
 
 Property Generics As list Of %String(XMLITEMNAME = "generic", XMLNAME = "generics");
 

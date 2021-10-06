@@ -1,4 +1,4 @@
-Class JavaSpec.Model.Parameters Extends (%RegisteredObject, %XML.Adaptor)
+Class JavaSpec.Model.Parameter Extends (%RegisteredObject, %XML.Adaptor)
 {
 
 Property Name As %String(XMLNAME = "name");

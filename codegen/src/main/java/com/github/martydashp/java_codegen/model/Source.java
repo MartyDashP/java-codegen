@@ -2,7 +2,10 @@ package com.github.martydashp.java_codegen.model;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import java.util.List;
 import javax.xml.bind.annotation.XmlElement;
 import lombok.Data;
 
@@ -12,6 +15,10 @@ public class Source {
 
     private String packageName;
     private String comment;
+
+    @JacksonXmlElementWrapper(localName = "staticImports")
+    @JacksonXmlProperty(localName = "staticImport")
+    private List<StaticImport> staticImports;
 
     @XmlElement
     @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "kind", visible = true)
