@@ -1,6 +1,8 @@
 package com.github.martydashp.java_codegen.builder;
 
+import com.github.martydashp.java_codegen.model.Annotation;
 import com.github.martydashp.java_codegen.model.ClassDefinition;
+import com.github.martydashp.java_codegen.model.Entry;
 import com.github.martydashp.java_codegen.model.EnumConstant;
 import com.github.martydashp.java_codegen.model.EnumDefinition;
 import com.github.martydashp.java_codegen.model.InterfaceDefinition;
@@ -11,6 +13,8 @@ import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeName;
 import com.squareup.javapoet.TypeSpec;
 import com.squareup.javapoet.TypeVariableName;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -64,6 +68,7 @@ public final class TypeSpecBuilder {
 
         addModifiers();
         addJavaDoc();
+        addGeneratedAnnotation();
         addAnnotations();
         addTypeVariables();
         addMethods();
@@ -79,6 +84,7 @@ public final class TypeSpecBuilder {
 
         addModifiers();
         addJavaDoc();
+        addGeneratedAnnotation();
         addAnnotations();
         addTypeVariables();
         addMethods();
@@ -93,6 +99,7 @@ public final class TypeSpecBuilder {
 
         addModifiers();
         addJavaDoc();
+        addGeneratedAnnotation();
         addAnnotations();
         addTypeVariables();
         addMethods();
@@ -124,6 +131,18 @@ public final class TypeSpecBuilder {
             final List<AnnotationSpec> specs = AnnotationSpecBuilder.getAnnotationSpecs(definition.getAnnotations());
             builder.addAnnotations(specs);
         }
+    }
+
+    private void addGeneratedAnnotation() {
+        final List<Entry> annotationEntries = new ArrayList<>();
+        annotationEntries.add(new Entry("value", "\"com.github.martydashp.java_codegen.JavaCodeGen\""));
+        annotationEntries.add(new Entry("date", String.format("\"%s\"", new Timestamp(System.currentTimeMillis()))));
+
+        final Annotation generatedAnnotation = new Annotation();
+        generatedAnnotation.setName("javax.annotation.processing.Generated");
+        generatedAnnotation.setElements(annotationEntries);
+
+        builder.addAnnotation(AnnotationSpecBuilder.getAnnotationSpec(generatedAnnotation));
     }
 
     private void addJavaDoc() {
