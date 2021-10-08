@@ -1,6 +1,7 @@
 package com.github.martydashp.java_codegen.builder;
 
 import com.github.martydashp.java_codegen.model.Type;
+import com.squareup.javapoet.ArrayTypeName;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.ParameterizedTypeName;
 import com.squareup.javapoet.TypeName;
@@ -32,7 +33,7 @@ public final class TypeBuilder {
             throw new IllegalArgumentException("type value is undefined");
         }
 
-        final TypeName typeName = getTypeName();
+        TypeName typeName = getTypeName();
 
         if (type.getArguments() != null) {
             if (!(typeName instanceof ClassName)) {
@@ -42,7 +43,11 @@ public final class TypeBuilder {
             final TypeName[] typeArguments = type.getArguments().stream()
                                                  .map(TypeBuilder::getTypeName)
                                                  .toArray(TypeName[]::new);
-            return ParameterizedTypeName.get((ClassName) typeName, typeArguments);
+            typeName = ParameterizedTypeName.get((ClassName) typeName, typeArguments);
+        }
+
+        if (type.isArray()) {
+            return ArrayTypeName.of(typeName);
         }
 
         return typeName;

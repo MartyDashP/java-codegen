@@ -9,6 +9,7 @@ import lombok.Data;
 public class Type {
 
     private String name;
+    private boolean isArray;
 
     @JacksonXmlElementWrapper(localName = "arguments")
     @JacksonXmlProperty(localName = "argument")
