@@ -1,4 +1,4 @@
-package io.github.martydashp
+package io.github.martydashp.java_codegen.gradle_plugin
 
 import com.github.martydashp.java_codegen.JavaCodeGen
 import org.gradle.api.DefaultTask

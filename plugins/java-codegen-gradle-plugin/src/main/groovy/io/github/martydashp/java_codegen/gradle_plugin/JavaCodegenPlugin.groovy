@@ -1,4 +1,4 @@
-package io.github.martydashp
+package io.github.martydashp.java_codegen.gradle_plugin
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project
