@@ -1,5 +1,6 @@
 package com.github.martydashp.java_codegen;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -11,41 +12,36 @@ import java.util.Objects;
 
 final class SpecReader {
 
-    static List<Source> ofYAML(File specFile) throws IOException {
-        Objects.requireNonNull(specFile);
-
-        final ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-        mapper.findAndRegisterModules();
-        return mapper.readValues(mapper.createParser(specFile), Source.class).readAll();
+    enum SpecFormat {
+        YML, YAML, JSON, XML
     }
 
-    static List<Source> ofJSON(File specFile) throws IOException {
-        Objects.requireNonNull(specFile);
-
-        final ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValues(mapper.createParser(specFile), Source.class).readAll();
-    }
-
-    static List<Source> ofXML(File specFile) throws IOException {
-        Objects.requireNonNull(specFile);
-
-        final XmlMapper mapper = new XmlMapper();
-        return mapper.readValues(mapper.createParser(specFile), Source.class).readAll();
+    private static List<Source> of(ObjectMapper mapper, File specFile) throws IOException {
+        try (JsonParser parser = mapper.createParser(specFile)) {
+            return mapper.readValues(parser, Source.class).readAll();
+        }
     }
 
     static List<Source> of(File specFile, String specFormat) throws IOException {
-        switch (specFormat.toLowerCase()) {
-            case "json":
-                return ofJSON(specFile);
+        return of(specFile, SpecFormat.valueOf(specFormat.toUpperCase()));
+    }
 
-            case "xml":
-                return ofXML(specFile);
+    static List<Source> of(File specFile, SpecFormat specFormat) throws IOException {
+        Objects.requireNonNull(specFile);
 
-            case "yml":
-            case "yaml":
-                return ofYAML(specFile);
+        switch (specFormat) {
+            case JSON:
+                return of(new ObjectMapper(), specFile);
+
+            case XML:
+                return of(new XmlMapper(), specFile);
+
+            case YML:
+            case YAML:
+                ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
+                mapper.findAndRegisterModules();
+                return of(mapper, specFile);
         }
-
-        throw new RuntimeException(String.format("Spec format '%s' is unsupported", specFormat));
+        return null;
     }
 }

@@ -1,6 +1,8 @@
 Class JavaSpec.Model.Method Extends (%RegisteredObject, %XML.Adaptor)
 {
 
+Parameter ConstructorName = "#constructor";
+
 Property Name As %String(XMLNAME = "name");
 
 Property ReturnType As JavaSpec.Model.Type(XMLNAME = "returnType");
